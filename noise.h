@@ -5,6 +5,8 @@
 #include <string.h>
 #include <float.h>
 
+#define PI 3.14159265358979323846
+
 typedef struct {
     float x;
     float y;
@@ -15,6 +17,10 @@ typedef struct {
     float y;
     float z;
 } Vec3;
+
+static int permutation[512];
+static Vec2 gradients[512];
+static Vec2 simplexGradients[12];
 
 static float dot2(
     Vec2 g, 
