@@ -1,5 +1,8 @@
 #include "poisson_disk.h"
 
+/*
+** Poisson Sampling
+*/
 PoissonCollection* poissonDiskSampling(
     float minDist,
     int width,
@@ -60,6 +63,9 @@ PoissonCollection* poissonDiskSampling(
     return points;
 }
 
+/*
+** Add Poisson Point
+*/
 void addPoissonPoint(
     PoissonCollection* collection, 
     float x, 

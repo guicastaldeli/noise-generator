@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "*.embeddedhtml": "html",
-        "point_generator.h": "c"
+        "point_generator.h": "c",
+        "map_generator.h": "c",
+        "domain_warp.h": "c"
     }
 }

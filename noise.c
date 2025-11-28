@@ -12,6 +12,9 @@ static int fastFloor(float x) {
     return (x > 0) ? (int)x : (int)x - 1;
 }
 
+/*
+** Simplex Noise
+*/
 float simplexNoise(float x, float y) {
     const float F2 = 0.5*(sqrt(3.0)-1.0);
     const float G2 = (3.0-sqrt(3.0))/6.0;
@@ -104,6 +107,9 @@ float fractualSimplexNoise(
     return total / maxValue;
 }
 
+/*
+** Curl Noise
+*/
 Vec2 curlNoise(float x, float y) {
     float eps = 0.01f;
     float n1 = simplexNoise(x, y + eps);

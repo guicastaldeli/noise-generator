@@ -1,5 +1,8 @@
 #include "point_generator.h"
 
+/*
+** Generate Points
+*/
 void generatePoints(
     PointCollection* collection,
     int worldSize,
@@ -42,6 +45,9 @@ void generatePoints(
     prinf("Generated %d points after %d attempts ", collection->count, attempts);
 }
 
+/*
+** Point Mask
+*/
 float pointMask(
     float worldX,
     float worldZ,
