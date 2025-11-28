@@ -1,3 +1,5 @@
+#include "main.h"
+
 typedef struct {
     float height;
     float water;

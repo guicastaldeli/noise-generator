@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
-#include <float.h>
-
+#include "main.h"
 #define MAX_POINT_RADIUS 200.f
 #define MIN_POINT_RADIUS 40.0f
 

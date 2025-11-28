@@ -1,11 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
-#include <float.h>
-
-#define PI 3.14159265358979323846
+#include "main.h"
+#include "poisson_disk.h"
 
 typedef struct {
     float x;
@@ -35,5 +29,12 @@ float fractualSimplexNoise(
     int octaves,
     float perssistence,
     float lacunatiry
+);
+Vec2 curlNoise(float x, float y);
+void generateRivers(
+    float** heightMap,
+    unsigned char** riverMap,
+    int size,
+    int numRivers
 );
 void initSystems(unsigned long seed);

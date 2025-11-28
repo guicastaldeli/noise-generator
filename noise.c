@@ -104,6 +104,101 @@ float fractualSimplexNoise(
     return total / maxValue;
 }
 
+Vec2 curlNoise(float x, float y) {
+    float eps = 0.01f;
+    float n1 = simplexNoise(x, y + eps);
+    float n2 = simplexNoise(x, y - eps);
+    float n3 = simplexNoise(x + eps, y);
+    float n4 = simplexNoise(x - eps, y);
+
+    Vec2 curl;
+    curl.x = (n2 - n1) / (2.0f * eps);
+    curl.y = -(n4 - n3) / (2.0f * eps);
+    return curl;
+}
+
+void generateRivers(
+    float** heightMap,
+    unsigned char** riverMap,
+    int size, 
+    int numRivers
+) {
+    PoissonCollection* sources = poissonDiskSampling(
+        100.0f,
+        size,
+        size,
+        30
+    );
+    for(int river = 0; river < numRivers && river < sources->count; river++) {
+        float posX = sources->points[river].x;
+        float posY = sources->points[river].y;
+        if(heightMap[(int)posX][(int)posY] < 20.0f) continue;
+
+        for(int step = 0; step < 800; step++) {
+            int x = (int)posX;
+            int y = (int)posY;
+            if(
+                x <= 1 ||
+                x >= size-2 ||
+                y <= 1 ||
+                y >= size-2
+            ) {
+                break;
+            }
+
+            for(int dx = -1; dx <= 1; dx++) {
+                for(int dy = -1; dy <= 1; dy++) {
+                    if(
+                        x+dx >= 0 && 
+                        x+dx < size && 
+                        y+dy >= 0 && 
+                        y+dy < size
+                    ) {
+                        riverMap[x+dx][y+dy] = 1;
+                    }
+                }
+            }
+
+            heightMap[x][y] -= 2.0f;
+            if(
+                x > 0 &&
+                y > 0 &&
+                x < size-1 &&
+                y < size-1
+            ) {
+                heightMap[x-1][y] -= 1.0f;
+                heightMap[x+1][y] -= 1.0f;
+                heightMap[x][y-1] -= 1.0f;
+                heightMap[x][y-1] -= 1.0f;
+            }
+
+            Vec2 curl = curlNoise(posX * 0.01f, posY * 0.01f);
+            float gradX = (heightMap[x+1][y] - heightMap[x-1][y]) / 2.0f;
+            float gradY = (heightMap[x][y+1] - heightMap[x][y-1]) / 2.0f;
+
+            float flowX = curl.x * 0.3f - gradX * 0.7f;
+            float flowY = curl.y * 0.3f - gradY * 0.7f;
+
+            float len = sqrtf(flowX * flowX + flowY * flowY);
+            if(len > 0) {
+                flowX /= len;
+                flowY /= len;
+            }
+
+            posX += flowX * 2.0f;
+            posY += flowY * 2.0f;
+            if(
+                heightMap[x][y] < 2.0f ||
+                (fabs(gradX) < 0.01f &&
+                fabs(gradY) < 0.01f)
+            ) {
+                break;
+            }
+        }
+    }
+    free(sources->points);
+}
+
 void initSystems(unsigned long seed) {
     srand(seed);
 
